@@ -3,7 +3,8 @@ pipeline {
 
     environment {
         NODEJS_HOME = tool name: 'nodejs'
-        PATH = "${NODEJS_HOME}/bin:${env.PATH}"
+        JAVA_HOME = tool name: 'jdk17'
+        PATH = "${NODEJS_HOME}/bin;${JAVA_HOME}/bin;${env.PATH}"
         PYTHON_ENV = 'python'
     }
 
@@ -13,10 +14,8 @@ pipeline {
     }
 
     stages {
-
         stage('Checkout') {
             steps {
-                // Jenkins will clone into default workspace automatically
                 git url: 'https://github.com/Zynaic/reqres-testing.git', branch: 'main'
             }
         }
@@ -24,10 +23,7 @@ pipeline {
         stage('API Tests (Newman)') {
             steps {
                 script {
-                    // Create directory for reports
                     bat 'mkdir api-tests\\newman-reports'
-
-                    // Run Newman tests with environment file and reports
                     def result = bat(script: '''
                         newman run api-tests\\reqres.postman_collection.json ^
                           -e api-tests\\reqres.postman_environment.json ^
@@ -60,6 +56,7 @@ pipeline {
             steps {
                 script {
                     bat 'mkdir jmeter\\reports'
+                    bat 'dir jmeter' // Debug
 
                     def result = bat(script: '''
                         jmeter -n -t jmeter\\reqres_test_plan.jmx -l jmeter\\reports\\results.jtl -e -o jmeter\\reports\\html
@@ -88,9 +85,10 @@ pipeline {
             steps {
                 script {
                     bat 'mkdir ui-tests\\reports'
+                    bat 'dir ui-tests\\tests' // Debug file presence
 
                     def result = bat(script: '''
-                        robot -d ui-tests\\reports ui-tests\\tests\\reqres-dashboard-tests.robot
+                        robot -d ui-tests\\reports ui-tests\\tests
                     ''', returnStatus: true)
 
                     if (result != 0) {
