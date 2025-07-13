@@ -1,0 +1,468 @@
+{
+	"info": {
+		"_postman_id": "596ff311-1d69-4dea-962d-ab8c6d34b13b",
+		"name": "Reqres API Test Suite",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32220903"
+	},
+	"item": [
+		{
+			"name": "1 - List Users (page 1)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Check response code",
+							"pm.test(\"Status code is 200\", () => pm.response.code === 200);",
+							"//Check response time",
+							"pm.test(\"Response time is less than 20s\", () => pm.response.responseTime < 20000);",
+							"//Check response body has data",
+							"pm.test(\"Response has data\", () => pm.response.json().data.length > 0);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "reqres-free-v1"
+					}
+				],
+				"url": {
+					"raw": "https://reqres.in/api/users?page=1",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"users"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "1 - List Users (page 2)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Check response code",
+							"pm.test(\"Status code is 200\", () => pm.response.code === 200);",
+							"//Check response time",
+							"pm.test(\"Response time is less than 20s\", () => pm.response.responseTime < 20000);",
+							"//Check response body has data",
+							"pm.test(\"Response has data\", () => pm.response.json().data.length > 0);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "reqres-free-v1"
+					}
+				],
+				"url": {
+					"raw": "https://reqres.in/api/users?page=2",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"users"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2 - Get Single User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Check response code",
+							"pm.test(\"Status code is 200\", () => pm.response.code === 200);",
+							"//Check User data",
+							"pm.test(\"User data is correct\", () => {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data.id).to.eql(2);",
+							"    pm.expect(jsonData.data.email).to.eql(\"janet.weaver@reqres.in\");",
+							"    pm.expect(jsonData.data.first_name).to.eql(\"Janet\");",
+							"    pm.expect(jsonData.data.last_name).to.eql(\"Weaver\");",
+							"    pm.expect(jsonData.data.avatar).to.eql(\"https://reqres.in/img/faces/2-image.jpg\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "reqres-free-v1"
+					}
+				],
+				"url": {
+					"raw": "https://reqres.in/api/users/2",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"users",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3 - Get Invalid User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Check response code is 404.\r",
+							"pm.test(\"Status code is 404\", () => pm.response.code === 404);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "reqres-free-v1"
+					}
+				],
+				"url": {
+					"raw": "https://reqres.in/api/users/23",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"users",
+						"23"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "4 - List Resources",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Check if the response status code is 200",
+							"pm.test(\"Status code is 200\", () => pm.response.code === 200);",
+							"//Check if the response time is less than 200ms",
+							"pm.test(\"Response time is less than 200ms\", () => pm.response.responseTime < 200);",
+							"//Check if the response body contains the key \"data\"",
+							"pm.test(\"Response body contains 'data'\", () => pm.response.json().hasOwnProperty(\"data\"));"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "reqres-free-v1"
+					}
+				],
+				"url": {
+					"raw": "https://reqres.in/api/unknown",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"unknown"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "5 - Get Single Resource",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Check if the response status code is 200",
+							"pm.test(\"Status code is 200\", () => pm.response.code === 200);",
+							"//Check Resource ID is 2",
+							"pm.test(\"Resource ID is 2\", () => pm.response.json().data.id === 2);",
+							"//Check if the response body contains the correct data",
+							"pm.test(\"Response body contains correct data\", () => {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data.id).to.eql(2);",
+							"    pm.expect(jsonData.data.name).to.eql(\"fuchsia rose\");",
+							"    pm.expect(jsonData.data.year).to.eql(2001);",
+							"    pm.expect(jsonData.data.color).to.eql(\"#C74375\");",
+							"    pm.expect(jsonData.data.pantone_value).to.eql(\"17-2031\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "reqres-free-v1"
+					}
+				],
+				"url": {
+					"raw": "https://reqres.in/api/unknown/2",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"unknown",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "6 - Delayed Response",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Check if the response status code is 200.\r",
+							"pm.test(\"Status code is 200\", () => pm.response.code === 200);\r",
+							"//Check if the response time is more than 2000ms.\r",
+							"pm.test(\"Response time is more than 200ms\", () => pm.response.responseTime > 200);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "reqres-free-v1"
+					}
+				],
+				"url": {
+					"raw": "https://reqres.in/api/users?delay=3",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"users"
+					],
+					"query": [
+						{
+							"key": "delay",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "7 - Create User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Check if the response status code is 201",
+							"pm.test(\"Status code is 201\", () => pm.response.code === 201);",
+							"//Check if the response body has the correct name field",
+							"pm.test(\"Response has name field\", () => pm.response.json().name);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "reqres-free-v1"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"name\": \"morpheus\", \"job\": \"leader\"}"
+				},
+				"url": {
+					"raw": "https://reqres.in/api/users",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "8 - Update User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Check if the response status code is 200",
+							"pm.test(\"Status code is 200\", () => pm.response.code === 200);",
+							"//Check if the response is updated",
+							"pm.test(\"Job is updated\", () => pm.response.json().job === 'zion resident');"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "reqres-free-v1"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"name\": \"morpheus\", \"job\": \"zion resident\"}"
+				},
+				"url": {
+					"raw": "https://reqres.in/api/users/2",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"users",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "9 - Delete User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Check if the response status code is 204\r",
+							"pm.test(\"Status code is 204\", () => pm.response.code === 204);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "reqres-free-v1"
+					}
+				],
+				"url": {
+					"raw": "https://reqres.in/api/users/2",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"users",
+						"2"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
