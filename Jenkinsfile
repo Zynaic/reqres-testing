@@ -59,7 +59,7 @@ pipeline {
                     bat 'dir jmeter' // Debug
 
                     def result = bat(script: '''
-                        jmeter -n -t jmeter\\reqres_test_plan.jmx -l jmeter\\reports\\results.jtl -e -o jmeter\\reports\\html
+                        jmeter -n -t performance-tests\\jmeter\\reqres_test_plan.jmx -l performance-tests\\jmeter\\reports\\results.jtl -e -o performance-tests\\jmeter\\reports\\html
                     ''', returnStatus: true)
 
                     if (result != 0) {
