@@ -52,34 +52,6 @@ pipeline {
             }
         }
 
-        stage('Performance Tests (JMeter)') {
-            steps {
-                script {
-                    bat 'mkdir jmeter\\reports'
-                    bat 'dir jmeter' // Debug
-
-                    def result = bat(script: '''
-                        jmeter -n -t performance-tests\\jmeter\\reqres_test_plan.jmx -l performance-tests\\jmeter\\reports\\results.jtl -e -o performance-tests\\jmeter\\reports\\html
-                    ''', returnStatus: true)
-
-                    if (result != 0) {
-                        error("JMeter test execution failed.")
-                    }
-                }
-            }
-            post {
-                always {
-                    publishHTML(target: [
-                        reportDir: 'jmeter/reports/html',
-                        reportFiles: 'index.html',
-                        reportName: 'JMeter Performance Tests',
-                        allowMissing: true,
-                        alwaysLinkToLastBuild: true,
-                        keepAll: true
-                    ])
-                }
-            }
-        }
 
         stage('UI Tests (Robot Framework)') {
             steps {
@@ -109,6 +81,35 @@ pipeline {
                 }
             }
         }
+        
+        stage('Performance Tests (JMeter)') {
+            steps {
+                script {
+                    bat 'mkdir jmeter\\reports'
+                    bat 'dir jmeter' // Debug
+
+                    def result = bat(script: '''
+                        jmeter -n -t performance-tests\\jmeter\\reqres_test_plan.jmx -l performance-tests\\jmeter\\reports\\results.jtl -e -o performance-tests\\jmeter\\reports\\html
+                    ''', returnStatus: true)
+
+                    if (result != 0) {
+                        error("JMeter test execution failed.")
+                    }
+                }
+            }
+            post {
+                always {
+                    publishHTML(target: [
+                        reportDir: 'jmeter/reports/html',
+                        reportFiles: 'index.html',
+                        reportName: 'JMeter Performance Tests',
+                        allowMissing: true,
+                        alwaysLinkToLastBuild: true,
+                        keepAll: true
+                    ])
+                }
+            }
+        }    
     }
 
     post {
