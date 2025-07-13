@@ -1,0 +1,48 @@
+# File: jenkins/config/jenkins-plugins.txt
+# Essential Jenkins plugins for this testing project
+
+# Core Pipeline Plugins
+workflow-aggregator:latest
+pipeline-stage-view:latest
+blueocean:latest
+
+# SCM Plugins
+git:latest
+github:latest
+github-branch-source:latest
+
+# Build Tools
+nodejs:latest
+ant:latest
+gradle:latest
+
+# Testing and Reporting
+junit:latest
+htmlpublisher:latest
+robot:latest
+performance:latest
+testng-results:latest
+
+# Notifications
+email-ext:latest
+slack:latest
+
+# Utilities
+build-timeout:latest
+timestamps:latest
+ws-cleanup:latest
+ansicolor:latest
+
+# Security
+authorize-project:latest
+matrix-auth:latest
+
+# Monitoring
+monitoring:latest
+disk-usage:latest
+
+# Additional Useful Plugins
+copyartifact:latest
+build-pipeline-plugin:latest
+parameterized-trigger:latest
+conditional-buildstep:latest

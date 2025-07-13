@@ -1,0 +1,50 @@
+# Robot Framework and Selenium dependencies
+robotframework==6.1.1
+robotframework-seleniumlibrary==6.1.3
+
+# Selenium WebDriver
+selenium==4.15.2
+
+# Browser drivers (Chrome, Firefox, Edge)
+webdriver-manager==4.0.1
+
+# Additional Robot Framework libraries
+robotframework-requests==0.9.4
+robotframework-jsonlibrary==0.5
+robotframework-pabot==2.16.0
+
+# Reporting and logging
+robotframework-reportportal==5.4.1
+robotframework-htmlreport==1.3.0
+
+# HTTP requests and API testing support
+requests==2.31.0
+urllib3==2.0.7
+
+# JSON handling
+jsonpath-ng==1.6.0
+
+# XML parsing
+lxml==4.9.3
+
+# Date and time utilities
+python-dateutil==2.8.2
+
+# Configuration management
+configparser==6.0.0
+
+# Testing utilities
+pytest==7.4.3
+pytest-html==4.1.1
+
+# Screenshot and image handling
+Pillow==10.1.0
+
+# Data manipulation
+pandas==2.1.3
+
+# Environment variables
+python-dotenv==1.0.0
+
+# Logging
+loguru==0.7.2

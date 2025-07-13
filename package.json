@@ -1,0 +1,45 @@
+{
+  "name": "reqres-api-testing",
+  "version": "1.0.0",
+  "description": "Comprehensive testing suite for ReqRes API including API, Performance, and UI tests",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run test:api",
+    "test:api": "newman run api-tests/postman/collections/Reqres_API_Test_Suite.json -e api-tests/postman/environments/EVN.json --reporters cli,htmlextra --reporter-htmlextra-export api-tests/newman-reports/newman-report.html",
+    "test:api:json": "newman run api-tests/postman/collections/Reqres_API_Test_Suite.json -e api-tests/postman/environments/EVN.json --reporters cli,json --reporter-json-export api-tests/newman-reports/newman-report.json",
+    "test:api:junit": "newman run api-tests/postman/collections/Reqres_API_Test_Suite.json -e api-tests/postman/environments/EVN.json --reporters cli,junit --reporter-junit-export api-tests/newman-reports/newman-report.xml",
+    "install-global": "npm install -g newman newman-reporter-htmlextra",
+    "clean": "rm -rf api-tests/newman-reports/* performance-tests/reports/* ui-tests/reports/*",
+    "setup": "npm install && npm run install-global"
+  },
+  "keywords": [
+    "api-testing",
+    "postman",
+    "newman",
+    "jmeter",
+    "robot-framework",
+    "reqres",
+    "automation"
+  ],
+  "author": "Zynaic",
+  "license": "MIT",
+  "dependencies": {
+    "newman": "^6.1.2",
+    "newman-reporter-htmlextra": "^1.23.1"
+  },
+  "devDependencies": {
+    "newman-reporter-junit": "^2.0.0"
+  },
+  "engines": {
+    "node": ">=22.17.0",
+    "npm": ">=10.8.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Zynaic/reqres-testing.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Zynaic/reqres-testing/issues"
+  },
+  "homepage": "https://github.com/Zynaic/reqres-testing#readme"
+}
