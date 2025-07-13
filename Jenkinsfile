@@ -90,7 +90,7 @@ pipeline {
                     bat 'mkdir ui-tests\\reports'
 
                     def result = bat(script: '''
-                        robot -d ui-tests\\reports ui-tests\\tests
+                        robot -d ui-tests\\reports ui-tests\\tests\\reqres-dashboard-tests.robot
                     ''', returnStatus: true)
 
                     if (result != 0) {
