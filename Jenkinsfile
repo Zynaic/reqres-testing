@@ -102,7 +102,7 @@ pipeline {
                 always {
                     publishHTML(target: [
                         reportDir: 'ui-tests/reports',
-                        reportFiles: 'report.html',
+                        reportFiles: 'report.html,report.js,log.html,log.js',
                         reportName: 'Robot Framework UI Tests',
                         allowMissing: true,
                         alwaysLinkToLastBuild: true,
