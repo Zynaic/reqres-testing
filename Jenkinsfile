@@ -56,13 +56,13 @@ pipeline {
         stage('Performance Tests (JMeter)') {
             steps {
                 script {
-                    bat 'mkdir jmeter\\reports'
-                    bat 'mkdir jmeter\\reports\\html'
+                    bat 'mkdir performance-tests\\jmeter\\reports'
+                    bat 'mkdir performance-tests\\jmeter\\reports\\html'
 
                     def result = bat(script: '''
-                        jmeter -n -t jmeter\\reqres_test_plan.jmx ^
-                          -l jmeter\\reports\\results.jtl ^
-                          -e -o jmeter\\reports\\html
+                        jmeter -n -t performance-tests\\jmeter\\ReqResTesting.jmx ^
+                          -l performance-tests\\jmeter\\reports\\results.jtl ^
+                          -e -o performance-tests\\jmeter\\reports\\html
                     ''', returnStatus: true)
 
                     if (result != 0) {
@@ -73,7 +73,7 @@ pipeline {
             post {
                 always {
                     publishHTML(target: [
-                        reportDir: 'jmeter/reports/html',
+                        reportDir: 'performance-tests/jmeter/reports/html',
                         reportFiles: 'index.html',
                         reportName: 'JMeter Performance Tests',
                         allowMissing: true,
