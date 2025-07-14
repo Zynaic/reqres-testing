@@ -1,5 +1,10 @@
 pipeline {
-    agent any
+    agent {
+        node {
+            customWorkspace 'F:\\reqres-testing'
+        }
+    }
+
 
     environment {
         NODEJS_HOME = tool name: 'nodejs'
@@ -24,6 +29,7 @@ pipeline {
             steps {
                 script {
                     bat 'mkdir api-tests\\newman-reports'
+
                     def result = bat(script: '''
                         newman run api-tests\\reqres.postman_collection.json ^
                           -e api-tests\\reqres.postman_environment.json ^
@@ -52,12 +58,47 @@ pipeline {
             }
         }
 
+        stage('Performance Tests (JMeter)') {
+            steps {
+                script {
+                    bat '''
+                        if not exist jmeter\\reports mkdir jmeter\\reports
+                        if not exist jmeter\\reports\\html mkdir jmeter\\reports\\html
+                    '''
+
+                    bat 'echo Current dir: %CD%'
+                    bat 'dir jmeter'
+
+                    def result = bat(script: '''
+                        jmeter -n -t jmeter\\reqres_test_plan.jmx ^
+                            -l jmeter\\reports\\results.jtl ^
+                            -e -o jmeter\\reports\\html
+                    ''', returnStatus: true)
+
+                    if (result != 0) {
+                        error("JMeter test execution failed.")
+                    }
+                }
+            }
+            post {
+                always {
+                    publishHTML(target: [
+                        reportDir: 'jmeter/reports/html',
+                        reportFiles: 'index.html',
+                        reportName: 'JMeter Performance Tests',
+                        allowMissing: true,
+                        alwaysLinkToLastBuild: true,
+                        keepAll: true
+                    ])
+                }
+            }
+        }
 
         stage('UI Tests (Robot Framework)') {
             steps {
                 script {
                     bat 'mkdir ui-tests\\reports'
-                    bat 'dir ui-tests\\tests' // Debug file presence
+                    bat 'dir ui-tests\\tests'
 
                     def result = bat(script: '''
                         robot -d ui-tests\\reports ui-tests\\tests
@@ -81,35 +122,6 @@ pipeline {
                 }
             }
         }
-        
-        stage('Performance Tests (JMeter)') {
-            steps {
-                script {
-                    bat 'mkdir jmeter\\reports'
-                    bat 'dir jmeter' // Debug
-
-                    def result = bat(script: '''
-                        jmeter -n -t performance-tests\\jmeter\\reqres_test_plan.jmx -l performance-tests\\jmeter\\reports\\results.jtl -e -o performance-tests\\jmeter\\reports\\html
-                    ''', returnStatus: true)
-
-                    if (result != 0) {
-                        error("JMeter test execution failed.")
-                    }
-                }
-            }
-            post {
-                always {
-                    publishHTML(target: [
-                        reportDir: 'jmeter/reports/html',
-                        reportFiles: 'index.html',
-                        reportName: 'JMeter Performance Tests',
-                        allowMissing: true,
-                        alwaysLinkToLastBuild: true,
-                        keepAll: true
-                    ])
-                }
-            }
-        }    
     }
 
     post {
