@@ -1,16 +1,11 @@
 pipeline {
-    agent {
-        node {
-            customWorkspace 'F:\\reqres-testing'
-        }
-    }
-
+    agent any
 
     environment {
         NODEJS_HOME = tool name: 'nodejs'
         JAVA_HOME = tool name: 'jdk17'
         PATH = "${NODEJS_HOME}/bin;${JAVA_HOME}/bin;${env.PATH}"
-        PYTHON_ENV = 'python'
+        WORKDIR = 'F:\\reqres-testing'
     }
 
     options {
@@ -21,33 +16,37 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/Zynaic/reqres-testing.git', branch: 'main'
+                dir("${env.WORKDIR}") {
+                    git url: 'https://github.com/Zynaic/reqres-testing.git', branch: 'main'
+                }
             }
         }
 
         stage('API Tests (Newman)') {
             steps {
-                script {
-                    bat 'mkdir api-tests\\newman-reports'
+                dir("${env.WORKDIR}") {
+                    script {
+                        bat 'mkdir api-tests\\newman-reports'
 
-                    def result = bat(script: '''
-                        newman run api-tests\\reqres.postman_collection.json ^
-                          -e api-tests\\reqres.postman_environment.json ^
-                          -r cli,htmlextra,junit ^
-                          --reporter-htmlextra-export api-tests\\newman-reports\\results.html ^
-                          --reporter-junit-export api-tests\\newman-reports\\results.xml
-                    ''', returnStatus: true)
+                        def result = bat(script: '''
+                            newman run api-tests\\reqres.postman_collection.json ^
+                              -e api-tests\\reqres.postman_environment.json ^
+                              -r cli,htmlextra,junit ^
+                              --reporter-htmlextra-export api-tests\\newman-reports\\results.html ^
+                              --reporter-junit-export api-tests\\newman-reports\\results.xml
+                        ''', returnStatus: true)
 
-                    if (result != 0) {
-                        error("Newman API tests failed.")
+                        if (result != 0) {
+                            error("Newman API tests failed.")
+                        }
                     }
                 }
             }
             post {
                 always {
-                    junit 'api-tests/newman-reports/results.xml'
+                    junit 'F:/reqres-testing/api-tests/newman-reports/results.xml'
                     publishHTML(target: [
-                        reportDir: 'api-tests/newman-reports',
+                        reportDir: 'F:/reqres-testing/api-tests/newman-reports',
                         reportFiles: 'results.html',
                         reportName: 'Newman API Tests',
                         allowMissing: true,
@@ -60,30 +59,25 @@ pipeline {
 
         stage('Performance Tests (JMeter)') {
             steps {
-                script {
-                    bat '''
-                        if not exist jmeter\\reports mkdir jmeter\\reports
-                        if not exist jmeter\\reports\\html mkdir jmeter\\reports\\html
-                    '''
+                dir("${env.WORKDIR}") {
+                    script {
+                        bat 'mkdir jmeter\\reports'
+                        bat 'dir jmeter'
 
-                    bat 'echo Current dir: %CD%'
-                    bat 'dir jmeter'
+                        def result = bat(script: '''
+                            jmeter -n -t jmeter\\reqres_test_plan.jmx -l jmeter\\reports\\results.jtl -e -o jmeter\\reports\\html
+                        ''', returnStatus: true)
 
-                    def result = bat(script: '''
-                        jmeter -n -t jmeter\\reqres_test_plan.jmx ^
-                            -l jmeter\\reports\\results.jtl ^
-                            -e -o jmeter\\reports\\html
-                    ''', returnStatus: true)
-
-                    if (result != 0) {
-                        error("JMeter test execution failed.")
+                        if (result != 0) {
+                            error("JMeter test execution failed.")
+                        }
                     }
                 }
             }
             post {
                 always {
                     publishHTML(target: [
-                        reportDir: 'jmeter/reports/html',
+                        reportDir: 'F:/reqres-testing/jmeter/reports/html',
                         reportFiles: 'index.html',
                         reportName: 'JMeter Performance Tests',
                         allowMissing: true,
@@ -96,23 +90,25 @@ pipeline {
 
         stage('UI Tests (Robot Framework)') {
             steps {
-                script {
-                    bat 'mkdir ui-tests\\reports'
-                    bat 'dir ui-tests\\tests'
+                dir("${env.WORKDIR}") {
+                    script {
+                        bat 'mkdir ui-tests\\reports'
+                        bat 'dir ui-tests\\tests'
 
-                    def result = bat(script: '''
-                        robot -d ui-tests\\reports ui-tests\\tests
-                    ''', returnStatus: true)
+                        def result = bat(script: '''
+                            robot -d ui-tests\\reports ui-tests\\tests
+                        ''', returnStatus: true)
 
-                    if (result != 0) {
-                        error("Robot Framework UI tests failed.")
+                        if (result != 0) {
+                            error("Robot Framework UI tests failed.")
+                        }
                     }
                 }
             }
             post {
                 always {
                     publishHTML(target: [
-                        reportDir: 'ui-tests/reports',
+                        reportDir: 'F:/reqres-testing/ui-tests/reports',
                         reportFiles: 'report.html',
                         reportName: 'Robot Framework UI Tests',
                         allowMissing: true,
